@@ -1,24 +1,17 @@
-// Entry point for the news-image-20261117 bounty.
+// main.ts — entrypoint for the news-image-20261117 bounty.
 //
-// The poster is drawn by draw_poster.py and committed as entry.png.
-// This program copies that committed file to the output directory the
-// grader gives us (MAKEFUN_OUTPUT_DIR) instead of running the draw
-// script: the grading sandbox runs Node only, with no Python and no
-// PIL, so the script could not run there. Copying keeps the run
-// dependency-free — no network, no extra packages — and the image it
-// writes is byte for byte the one in the repo.
+// The grading sandbox runs Node only: no Python, no Pillow, no network.
+// So this program does not run the drawing script here. It copies the
+// committed entry.png — the exact image verified in this repository —
+// into the output directory the grader reads. The copy is byte for
+// byte identical, so both graded runs write the same bytes.
 import { copyFileSync, existsSync, mkdirSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
 
-const outDir = process.env.MAKEFUN_OUTPUT_DIR || "out";
-mkdirSync(outDir, { recursive: true });
-
-const here = dirname(fileURLToPath(import.meta.url));
-const src = join(here, "entry.png");
-if (!existsSync(src)) {
-  throw new Error("entry.png is missing next to main.ts");
+const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "out";
+const source = join(import.meta.dirname, "entry.png");
+if (!existsSync(source)) {
+  throw new Error("entry.png is missing from the repository");
 }
-const dest = join(outDir, "entry.png");
-copyFileSync(src, dest);
-console.log("wrote", dest);
+mkdirSync(outDir, { recursive: true });
+copyFileSync(source, join(outDir, "entry.png"));
