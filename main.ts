@@ -1,9 +1,12 @@
 // Entry point for the news-image-20261117 bounty.
 //
 // The poster is drawn by draw_poster.py and committed as entry.png.
-// This program copies it to the output directory the grader gives us
-// (MAKEFUN_OUTPUT_DIR), so the run needs no network and no extra
-// packages: the image it writes is byte for byte the one in the repo.
+// This program copies that committed file to the output directory the
+// grader gives us (MAKEFUN_OUTPUT_DIR) instead of running the draw
+// script: the grading sandbox runs Node only, with no Python and no
+// PIL, so the script could not run there. Copying keeps the run
+// dependency-free — no network, no extra packages — and the image it
+// writes is byte for byte the one in the repo.
 import { copyFileSync, existsSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
